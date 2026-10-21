@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Виртуальное окружение
+.venv/
+venv/
+env/
+
+# uv
+# uv.lock НЕ игнорируется - его нужно коммитить (детерминированные зависимости)
+.uv-cache/
+
+# Переменные окружения / секреты
+.env
+.env.local
+.env.*.local
+.zed
+pyrightconfig.json
+
+# Инструменты качества кода
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# Сборка/дистрибуция
+build/
+dist/
+*.egg-info/
+*.egg
+
+# БД (если используешь SQLite локально)
+*.db
+*.sqlite3
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Логи
+*.log
