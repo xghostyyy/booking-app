@@ -1,0 +1,9 @@
+# Pre-commit hooks: https://pre-commit.com
+# Включить: pre-commit install
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.17.6
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
