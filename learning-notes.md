@@ -294,3 +294,7 @@ func_count), initialised at the top of handle() and printed at the end. This is 
 > [!note] 2026-11-24: тест Booking.clean прошёл break-проверку
 >
 > Первая автоматическая Django-проверка написана учеником в users/tests.py. Она создаёт Booking с executor первого исполнителя и service второго; ORM create проходит, full_clean() ожидает ValidationError, есть assert по pk. Запуск: Ran 1 test, OK. Break-тест: ученик временно отключил проверку в Booking.clean() — тест упал (FAILED, 1 failure); проверку восстановил — тест снова прошёл. Вывод: тест действительно обнаруживает удаление правила. Следующий шаг: написать тест PROTECT для удаления Service с существующей Booking, затем break-тест с on_delete=CASCADE. Ученик попросил продолжить позже.
+
+> [!success] QuerySet count and first
+>
+> Learner correctly recalled that QuerySet.count() returns number of matching rows, and QuerySet.first() returns the first matching object (or None if empty). Explained first() should be used only when choosing a first row is valid for the product logic.

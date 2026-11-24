@@ -1,6 +1,7 @@
 from users.models import Role, User, Executor, Booking, Service
 from django.test import TestCase
 from django.core.exceptions import ValidationError
+from django.db.models import ProtectedError
 from decimal import Decimal
 from datetime import timedelta
 from django.utils import timezone
@@ -30,3 +31,17 @@ class CatalogTest(TestCase):
 
         with self.assertRaises(ValidationError):
             booking.full_clean()
+
+    def test_protect_booking(self):
+        start = timezone.now()
+        end = start + timedelta(hours=1)
+        booking = Booking.objects.create(executor=self.ex1, service=self.service1,
+            user=self.user, start=start, end=end)
+
+        self.assertIsNotNone(booking.pk)
+
+        with self.assertRaises(ProtectedError):
+            self.service1.delete()
+
+        self.assertTrue(Service.objects.filter(pk=self.service1.pk).exists())
+        self.assertTrue(Booking.objects.filter(pk=booking.pk).exists())
