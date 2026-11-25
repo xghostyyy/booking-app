@@ -1,4 +1,6 @@
 from users.models import Role, User, Executor, Booking, Service
+from rest_framework.test import APITestCase
+from django.urls import reverse
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 from django.db.models import ProtectedError
@@ -45,3 +47,38 @@ class CatalogTest(TestCase):
 
         self.assertTrue(Service.objects.filter(pk=self.service1.pk).exists())
         self.assertTrue(Booking.objects.filter(pk=booking.pk).exists())
+
+class ServiceAPITest(APITestCase):
+    def setUp(self):
+        tutor = Role.objects.create(name="tutor")
+        self.ex = Executor.objects.create(user=User.objects.create(username="ex",
+            email="ex@ex.ex", role=tutor))
+        self.service = Service.objects.create(executor=self.ex, title="Тестовая услуга",
+            duration_minutes=120, price=Decimal(str(1200)), format=Service.Format.ONLINE)
+        self.inactive_service = Service.objects.create(executor=self.ex, title="Тестовая неактивная услуга",
+            duration_minutes=120, price=Decimal(str(1200)), format=Service.Format.ONLINE, is_active=False)
+
+    def test_detail_active(self):
+        response = self.client.get(reverse("service", args=[self.service.pk]))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["id"], self.service.pk)
+        self.assertEqual(response.data["title"], self.service.title)
+
+    def test_detail_inactive(self):
+        Service.objects.filter(pk=self.service.pk).update(is_active=False)
+        response = self.client.get(reverse("service", args=[self.service.pk]))
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_detail_missing(self):
+        response = self.client.get(reverse("service", args=[999999]))
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_list_active_only(self):
+        response = self.client.get(reverse("services"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]["id"], self.service.pk)

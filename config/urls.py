@@ -21,4 +21,5 @@ from users import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('service/<int:service_id>/', views.service, name="service"),
+    path('services/', views.services, name="services"),
 ]

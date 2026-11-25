@@ -49,3 +49,6 @@ Thumbs.db
 
 # Логи
 *.log
+
+# Concept Loom local learning state
+.concept-loom/
